@@ -94,7 +94,6 @@ s.on('message', function (msg, info) {
 		param, cmd, re, match;
 
 	console.log(text);
-	console.log(info);
 	if (servers[addr] === undefined && addr.match(/172.17.0./)) {
 		servers[addr] = new Server(String(addr), String(rcon_pass));
 	}
@@ -365,7 +364,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 	};*/
 	this.realrcon = async function (cmd) {
 		if (cmd === undefined) return;
-		console.log(cmd);
+		//console.log(cmd);
 		const conn = new rcon({
 		    host: this.state.ip,
 		    port: this.state.port
@@ -825,7 +824,6 @@ function Server(address, pass, adminip, adminid, adminname) {
 		this.state.round = 0;
 		this.rcon(CONFIG);
 	};
-	console.log('send rcon comms');
 	this.rcon('sv_rcon_whitelist_address ' + nconf.get('ip') + ';logaddress_add ' + nconf.get('ip') + ':' + nconf.get('port') + ';log on');
 	this.status();
 	setTimeout(function () {
