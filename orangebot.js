@@ -26,45 +26,17 @@ if (!fs.existsSync(conf_file)) {
 nconf.file({ file: conf_file });
 if(nconf.get('ip') == '') nconf.set('ip', require('ip').address());
 var admins = nconf.get('admins'), static = nconf.get('static'), rcon_pass = nconf.get('rcon_pass'), whitelist = nconf.get('whitelist'), pool = nconf.get('pool'), gotv = nconf.get('gotv'),
-Irc = require('irc'), irc = new Irc.Client(nconf.get('irc:server'), nconf.get('irc:nick'), {
-	channels: nconf.get('irc:channels'),
-	realName: nconf.get('irc:realname'),
-	autoRejoin: true
-}),
 named = require('named-regexp').named,
-rcon = require('simple-rcon'),
+//rcon = require('simple-rcon'),
 dns = require('dns'),
 dgram = require('dgram'),
-request = require('request'),
 s = dgram.createSocket('udp4'),
 SteamID = require('steamid'),
 admins64 = [],
-TelegramBot = require('node-telegram-bot-api'),
 token = nconf.get('token'),
-groupId = nconf.get('group'),
-bot = new TelegramBot(token, {
-	polling: true
-});
-
-bot.on('message', function (msg) {
-	if (!msg.text) return;
-	if (msg.chat.id != groupId) return;
-	var nick = msg.from.username || msg.from.first_name;
-	var message = msg.text;
-	if (msg.reply_to_message) {
-		var re = named(/@(:<addr>\d+\.\d+\.\d+\.\d+:\d+)/m);
-		var match = re.exec(msg.reply_to_message.text);
-		if (match !== null) {
-			var addr = match.capture('addr');
-			if (message.match(/^!/)) {
-				servers[addr].say(message);
-			} else {
-				servers[addr].chat(' \x06Admin: \x10' + message);
-				servers[addr].center('Admin: ' + message);
-			}
-		}
-	}
-});
+groupId = nconf.get('group');
+//rcon srcds
+const rcon = require('rcon-srcds');
 
 function whitelisted(steamid) {
 	for (var i in whitelist) {
@@ -115,12 +87,14 @@ String.prototype.format = function () {
 	}
 	return formatted;
 };
-
+//recieve messages
 s.on('message', function (msg, info) {
 	var addr = info.address + ':' + info.port;
 	var text = msg.toString(),
 		param, cmd, re, match;
 
+	console.log(text);
+	console.log(info);
 	if (servers[addr] === undefined && addr.match(/172.17.0./)) {
 		servers[addr] = new Server(String(addr), String(rcon_pass));
 	}
@@ -133,24 +107,8 @@ s.on('message', function (msg, info) {
 			var conName = match.capture('user_name');
 			var conId = match.capture('steam_id');
 			var conId64 = id64(conId);
-			request('http://akl.tite.fi/akl-service/api/users/communityid/'+conId64, function (error, response, body) {
-				//console.log(response);
-				if (error) {
-					servers[addr].chat(' \x10Letting '+conName+' connect because AKL API is not responding :D');
-					return;
-				}
-				if (response.statusCode == 200) {
-					servers[addr].chat(' \x10' + conName + ' (connecting) is a registered user.');
-				} else if (whitelisted(conId)) {
-					servers[addr].chat(' \x10' + conName + ' (connecting) is whitelisted.');
-				} else {
-					servers[addr].chat(' \x10' + conName + ' tried to connect, but is not registered.');
-					servers[addr].rcon('kickid '+conId+' This account is not registered on akl.tite.fi');
-				}
-				if (body.match(/(ROLE_ADMIN|ROLE_REFEREE)/gm) && admins64.indexOf(conId64) < 0) {
-					admins64.push(conId64);
-				}
-			});
+			//
+			servers[addr].chat(' \x10Letting '+conName+' connect because AKL API is not responding :D');
 		}
 	}
 
@@ -248,9 +206,6 @@ s.on('message', function (msg, info) {
 		switch (String(cmd)) {
 		case 'admin':
 			var message = param.join(' ').replace('!admin ', '');
-			bot.sendMessage(groupId, '*' + match.capture('user_name') + '@' + addr + "*\n" + message + "\n*Admin called*", {
-				parse_mode: 'Markdown'
-			});
 			break;
 		case 'status':
 		case 'stats':
@@ -389,7 +344,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 	this.rcon = function (cmd) {
 		if (cmd === undefined) return;
 		this.state.queue.push(cmd);
-	};
+	};/*
 	this.realrcon = function (cmd) {
 		if (cmd === undefined) return;
 		var conn = new rcon({
@@ -407,6 +362,24 @@ function Server(address, pass, adminip, adminid, adminname) {
 			//console.log('err);
 		});
 		conn.connect();
+	};*/
+	this.realrcon = async function (cmd) {
+		if (cmd === undefined) return;
+		console.log(cmd);
+		const conn = new rcon({
+		    host: this.state.ip,
+		    port: this.state.port
+		});
+		try {
+			await conn.authenticate(this.state.pass);
+			cmd = cmd.split(';');
+			for (var i in cmd) {
+				conn.execute(String(cmd[i]));
+			}
+			conn.disconnect()
+		} catch(e) {
+		    console.error(e);
+		}
 	};
 	this.clantag = function (team) {
 		if (team != 'TERRORIST' && team != 'CT') {
@@ -500,20 +473,11 @@ function Server(address, pass, adminip, adminid, adminname) {
 		this.state.round++;
 	};
 	this.win = function () {
-		for (var i in nconf.get('irc:channels')) {
-			irc.send('NOTICE', nconf.get('irc:channels')[i], 'Matsi päättyi! (' + this.state.stats + ')');
-		}
 		var message = this.state.stats + "\n" + this.state.maps.join(' ').replace(this.state.map, '*' + this.state.map + '*').replace(/de_/g, '') + "\n*Match ended*";
-		bot.sendMessage(groupId, '*Console@' + this.state.ip + ':' + this.state.port + "*\n" + message, {
-			parse_mode: 'Markdown'
-		});
 	};
 	this.pause = function () {
 		if (!this.state.live) return;
 		var message = this.clantag('TERRORIST') + ' - ' + this.clantag('CT') + "\n*Match paused*";
-		bot.sendMessage(groupId, '*Console@' + this.state.ip + ':' + this.state.port + "*\n" + message, {
-			parse_mode: 'Markdown'
-		});
 		this.rcon(PAUSE_ENABLED);
 		this.state.paused = true;
 		this.state.unpause = {
@@ -524,7 +488,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 			this.rcon(MATCH_PAUSED);
 		}
 	};
-	this.status = function () {
+	this.statusOld = function () {
 		var conn = new rcon({
 			host: this.state.ip,
 			port: this.state.port,
@@ -565,6 +529,42 @@ function Server(address, pass, adminip, adminid, adminname) {
 					}
 					conn.close();
 				}).connect();*/
+	};
+	this.status = async function () {
+		const conn = new rcon({
+		    host: this.state.ip,
+		    port: this.state.port
+		});
+		try {
+			await conn.authenticate(this.state.pass);
+		    let body = await conn.execute("status"); // You can parse `status` reponse
+		    var re = named(/map\s+:\s+(:<map>.*?)\s/);
+			var match = re.exec(body);
+			if (match !== null) {
+				var map = match.capture('map');
+				if (tag.state.maps.indexOf(map) >= 0) {
+					tag.state.map = map;
+				} else {
+					tag.state.maps = [map];
+					tag.state.map = map;
+				}
+				tag.stats(false);
+			}
+			var regex = new RegExp('"(:<user_name>.*?)" (:<steam_id>STEAM_.*?) .*?' + adminip + ':', '');
+			re = named(regex);
+			match = re.exec(body);
+			if (match !== null) {
+				for (var i in match.captures.steam_id) {
+					if (tag.state.steamid.indexOf(id64(match.captures.steam_id[i])) == -1) {
+						tag.state.steamid.push(id64(match.captures.steam_id[i]));
+						tag.state.admins.push(match.captures.user_name[i]);
+					}
+				}
+			}
+			conn.disconnect()
+		} catch(e) {
+		    console.error(e);
+		}
 	};
 	this.start = function (maps) {
 		this.state.score = [];
@@ -704,14 +704,8 @@ function Server(address, pass, adminip, adminid, adminname) {
 					}, 9000);
 				}
 				var message = this.stats(false) + "\n" + this.state.maps.join(' ').replace(this.state.map, '*' + this.state.map + '*').replace(/de_/g, '') + "\n*Match started*";
-				bot.sendMessage(groupId, '*Console@' + this.state.ip + ':' + this.state.port + "*\n" + message, {
-					parse_mode: 'Markdown'
-				});
 				if (gotv[this.state.ip][this.state.port] !== undefined && Object.keys(this.state.players).length >= 5) {
 					var teams = this.clantag('TERRORIST') + ' - ' + this.clantag('CT');
-					for (var i in nconf.get('irc:channels')) {
-						irc.send('NOTICE', nconf.get('irc:channels')[i], 'Matsi alkaa! (' + teams + ') GOTV osoitteessa ' + gotv[this.state.ip][this.state.port]);
-					}
 				}
 				setTimeout(function () {
 					tag.chat(' \x054...');
@@ -734,9 +728,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 	};
 	this.newmap = function (map, delay) {
 		/*var message = this.stats(false) + "\n" + this.state.maps.join(' ').replace(map, '*' + map + '*').replace(/de_/g, '') + "\n*Map loaded*";
-		bot.sendMessage(groupId, '*Console@' + this.state.ip + ':' + this.state.port + "*\n" + message, {
-			parse_mode: 'Markdown'
-		});*/
+		*/
 		if (delay === undefined) delay = 10000;
 		var index = -1;
 		if (this.state.maps.indexOf(map) >= 0) {
@@ -769,9 +761,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 	};
 	this.score = function (score) {
 		/*var message = this.clantag('TERRORIST') + ' *' + score.TERRORIST + ' - ' + score.CT + '* ' + this.clantag('CT');
-		bot.sendMessage(groupId, '*Console@' + this.state.ip + ':' + this.state.port + "*\n" + message, {
-			parse_mode: 'Markdown'
-		});*/
+		*/
 		var tagscore = {};
 		tagscore[this.clantag('CT')] = score.CT;
 		tagscore[this.clantag('TERRORIST')] = score.TERRORIST;
@@ -835,6 +825,7 @@ function Server(address, pass, adminip, adminid, adminname) {
 		this.state.round = 0;
 		this.rcon(CONFIG);
 	};
+	console.log('send rcon comms');
 	this.rcon('sv_rcon_whitelist_address ' + nconf.get('ip') + ';logaddress_add ' + nconf.get('ip') + ':' + nconf.get('port') + ';log on');
 	this.status();
 	setTimeout(function () {
@@ -863,7 +854,7 @@ setInterval(function () {
 			servers[i].rcon(MATCH_PAUSED);
 		}
 	}
-}, 15000);
+}, 10000);
 setInterval(function () {
 	for (var i in servers) {
 		if (!servers.hasOwnProperty(i)) return;
@@ -885,6 +876,7 @@ process.on('uncaughtException', function (err) {
 	console.log(err);
 });
 
+//start server connections
 function addServer(host, port, pass) {
 	dns.lookup(host, 4, function (err, ip) {
 		servers[ip + ':' + port] = new Server(ip + ':' + port, pass);
