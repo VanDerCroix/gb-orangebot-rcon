@@ -5,7 +5,7 @@
   "main": "orangebot.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dregu/orangebot"
+    "url": "https://github.com/VanDerCroix/gb-orangebot-rcon"
   },
   "dependencies": {
     "ip": "latest",

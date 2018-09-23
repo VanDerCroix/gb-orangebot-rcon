@@ -1,13 +1,12 @@
-# OrangeBot
+# OrangeBot vanilla
 OrangeBot is a CS:GO matchmaking bot written in node.js. It uses a logaddress and rcon to execute server commands based on chat !commands. This means it works on a vanilla CS:GO server.
 
-## Howto
+## INSTALL
 ```
 npm install
-sudo npm install -g forever
 cp default-config.json config.json
 nano config.json
-forever start orangebot.js
+node orangebot.js
 ```
 You can define static servers and admins steamid in config.json or connect your server dynamically with rcon.
 Current master branch contains our league specific features like irc announcements and telegram bot for admins.
