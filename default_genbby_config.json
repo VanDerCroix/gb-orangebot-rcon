@@ -1,0 +1,16 @@
+{
+	"port": 6699,
+	"server": [{
+		"host": "10.0.0.24",
+		"port": 27015,
+		"pass": "24r4w2r"
+	}],
+	"admins": [],
+	"default_rcon": "24r4w2r",
+	"telegram_token": "",
+	"telegram_group": "-148659596",
+	"pause_time": 0,
+	"pause_uses": 1,
+	"ready_time": 0,
+	"serverType": "local"
+}
