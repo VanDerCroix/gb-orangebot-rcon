@@ -710,7 +710,9 @@ process.on('uncaughtException', function (err) {
 function addServer(host, port, pass) {
 	dns.lookup(host, 4, function (err, ip) {
 		servers[ip + ':' + port] = new Server(ip + ':' + port, pass);
-		servers[ip + ':' + port].start(['overpass', 'cache', 'mirage'])
+		servers[ip + ':' + port].state.ready.TERRORIST = true;
+		servers[ip + ':' + port].state.ready.CT = true;
+		servers[ip + ':' + port].start(['cache', 'overpass', 'mirage'])
 	});
 }
 
