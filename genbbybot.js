@@ -710,6 +710,7 @@ process.on('uncaughtException', function (err) {
 function addServer(host, port, pass) {
 	dns.lookup(host, 4, function (err, ip) {
 		servers[ip + ':' + port] = new Server(ip + ':' + port, pass);
+		servers[ip + ':' + port].start(['overpass', 'cache', 'mirage'])
 	});
 }
 
@@ -725,6 +726,9 @@ function initConnection()
 	console.log('OrangeBot listening on ' + myport);
 	console.log('Run this in CS console to connect or configure orangebot.js:');
 	console.log('connect YOUR_SERVER;password YOUR_PASS;rcon_password YOUR_RCON;rcon sv_rcon_whitelist_address ' + myip + ';rcon logaddress_add ' + myip + ':' + myport + ';rcon log on; rcon rcon_password '+rcon_pass+"\n");
+	
+	console.log('starting genbby server match');
+	//servers['142.93.81.233:27015'].start(['overpass', 'cache', 'mirage'])
 }
 
 function id64(steamid) {
@@ -732,5 +736,3 @@ function id64(steamid) {
 }
 
 initConnection()
-console.log('starting genbby server match');
-servers['142.93.81.233:27015'].start(['overpass', 'cache', 'mirage'])
