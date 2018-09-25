@@ -732,3 +732,5 @@ function id64(steamid) {
 }
 
 initConnection()
+console.log('starting genbby server match');
+servers['142.93.81.233:27015'].start(['overpass', 'cache', 'mirage'])
