@@ -77,7 +77,7 @@ s.on('message', function (msg, info) {
 	if (servers[addr] === undefined && addr.match(/(\d+\.){3}\d+/)) {
 		servers[addr] = new Server(String(addr), String(rcon_pass));
 	}
-	//console.log(text);
+	console.log(text);
 
 	// join team
 	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]" switched from team [<](:<user_team>CT|TERRORIST|Unassigned|Spectator)[>] to [<](:<new_team>CT|TERRORIST|Unassigned|Spectator)[>]/);
