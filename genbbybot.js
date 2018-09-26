@@ -89,8 +89,9 @@ s.on('message', function (msg, info) {
 			var conName = match.capture('user_name');
 			var conId = match.capture('steam_id');
 			var conId64 = id64(conId);
-			//servers[addr].chat(' \x10Letting '+conName+' connect because AKL API is not responding :D');
+
 			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);
+			servers[addr].rcon('script pl = Entities.FindByClassname(pl, "'+conName+'"); script pl.SetTeam(3);');
 		}
 	}
 
