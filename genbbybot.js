@@ -80,6 +80,20 @@ s.on('message', function (msg, info) {
 	}
 	console.log(text);
 
+	// connected
+	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" connected|entered/);
+	match = re.exec(text);
+	if (match !== null) {
+		if (match.capture('steam_id') != 'BOT') {
+			var conGameId = match.capture('user_id')
+			var conName = match.capture('user_name');
+			var conId = match.capture('steam_id');
+			var conId64 = id64(conId);
+			//servers[addr].chat(' \x10Letting '+conName+' connect because AKL API is not responding :D');
+			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);
+		}
+	}
+
 	// join team
 	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]" switched from team [<](:<user_team>CT|TERRORIST|Unassigned|Spectator)[>] to [<](:<new_team>CT|TERRORIST|Unassigned|Spectator)[>]/);
 	match = re.exec(text);
