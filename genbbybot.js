@@ -81,7 +81,7 @@ s.on('message', function (msg, info) {
 	console.log(text);
 
 	// connected
-	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" connected|entered/);
+	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" connected/);
 	match = re.exec(text);
 	if (match !== null) {
 		if (match.capture('steam_id') != 'BOT') {
