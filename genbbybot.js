@@ -259,7 +259,7 @@ s.on('message', function (msg, info) {
 			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt().tostring());script ScriptPrintMessageCenterAll(GetMapName())');
 			break;
 		case 'time':
-			servers[addr].rcon('script local mape = "holi";script ScriptPrintMessageChatAll(mape)');
+			servers[addr].rcon('script local mape <- "holi";script ScriptPrintMessageChatAll(mape)');
 			break;
 		default:
 		}
