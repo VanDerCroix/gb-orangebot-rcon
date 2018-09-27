@@ -91,7 +91,7 @@ s.on('message', function (msg, info) {
 			var conId64 = id64(conId);
 */
 			console.log('real player connected: ' + conName + ' gameId: ' + conGameId);
-			servers[addr].rcon('script Entities.FindByName( null, "'+conName+'" ).SetTeam(3);');
+			//servers[addr].rcon('script Entities.FindByName( null, "'+conName+'" ).SetTeam(3);');
 		}
 	}
 
@@ -244,6 +244,14 @@ s.on('message', function (msg, info) {
 			break;
 		case 'debug':
 			servers[addr].debug();
+			break;
+		case 'terro':
+			console.log(match.capture('user_team') + 'wants to go terro');
+			servers[addr].say(match.capture('user_team') + 'wants to go terro');
+			break;
+		case 'tombo':
+			console.log(match.capture('user_team') + 'wants to go tombo');
+			servers[addr].say(match.capture('user_team') + 'wants to go tombo');
 			break;
 		default:
 		}
