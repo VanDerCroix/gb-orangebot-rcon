@@ -248,7 +248,7 @@ s.on('message', function (msg, info) {
 		case 'terro':
 			console.log(match.capture('user_name') + ' wants to go terro');
 			servers[addr].say(match.capture('user_name') + ' wants to go terro');
-			servers[addr].rcon('script Entities.FindByName( null, "'+match.capture('user_name')+'" ).SetTeam(2);');
+			servers[addr].rcon('script sami <- Entities.FindByName( null, "'+match.capture('user_name')+'" );script sami.SetTeam(2);');
 			break;
 		case 'tombo':
 			console.log(match.capture('user_name') + ' wants to go tombo');
