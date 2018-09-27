@@ -253,7 +253,7 @@ s.on('message', function (msg, info) {
 		case 'tombo':
 			console.log(match.capture('user_name') + ' wants to go tombo');
 			servers[addr].say(match.capture('user_name') + ' wants to go tombo');
-			servers[addr].rcon('script Entities.FindByName( null, "'+match.capture('user_name')+'" ).SetTeam(3);');
+			servers[addr].rcon('script sami <- Entities.FindByName( null, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(sami.GetName())');
 			break;
 		case 'mapname':
 			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt().tostring());script ScriptPrintMessageCenterAll(GetMapName())');
