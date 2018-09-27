@@ -81,7 +81,7 @@ s.on('message', function (msg, info) {
 	console.log(text);
 
 	// connected
-	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" entered/);
+	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" entered the game/);
 	match = re.exec(text);
 	if (match !== null) {
 		if (match.capture('steam_id') != 'BOT') {
@@ -91,7 +91,7 @@ s.on('message', function (msg, info) {
 			var conId64 = id64(conId);
 
 			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);*/
-			servers[addr].rcon('script pl <- Entities.FindByName( null, "'+conName+'" );pl.SetTeam(3);');
+			servers[addr].rcon('script pl <- Entities.FindByName( null, "'+conName+'" );script pl.SetTeam(3);');
 		}
 	}
 
