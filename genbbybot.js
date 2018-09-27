@@ -255,6 +255,12 @@ s.on('message', function (msg, info) {
 			servers[addr].say(match.capture('user_name') + ' wants to go tombo');
 			servers[addr].rcon('script Entities.FindByName( null, "'+match.capture('user_name')+'" ).SetTeam(3);');
 			break;
+		case 'mapname':
+			servers[addr].rcon('say GetMapName();');
+			break;
+		case 'time':
+			servers[addr].rcon('say Time;');
+			break;
 		default:
 		}
 		servers[addr].lastlog = +new Date();
