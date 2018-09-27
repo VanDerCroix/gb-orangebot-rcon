@@ -256,10 +256,10 @@ s.on('message', function (msg, info) {
 			servers[addr].rcon('script Entities.FindByName( null, "'+match.capture('user_name')+'" ).SetTeam(3);');
 			break;
 		case 'mapname':
-			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt());script ScriptPrintMessageCenterAll(GetMapName());script ScriptPrintMessageCenterAll(true)');
+			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt().tostring());script ScriptPrintMessageCenterAll(GetMapName());script ScriptPrintMessageChatAll(true)');
 			break;
 		case 'time':
-			servers[addr].rcon('script ScriptPrintMessageChatAll(Time());script ScriptPrintMessageChatAll(RandomFloat());script ScriptPrintMessageCenterAll(100)');
+			servers[addr].rcon('script ScriptPrintMessageChatAll(Time());script ScriptPrintMessageChatAll(RandomFloat().tostring());script ScriptPrintMessageChatAll(125200)');
 			break;
 		default:
 		}
