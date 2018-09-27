@@ -91,7 +91,7 @@ s.on('message', function (msg, info) {
 			var conId64 = id64(conId);
 
 			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);*/
-			servers[addr].rcon('script pl = Entities.FindByName(pl, "'+conName+'");script pl.SetTeam(3);');
+			servers[addr].rcon('script pl <- Entities.FindByName( null, "'+conName+'" );pl.SetTeam(3);');
 		}
 	}
 
