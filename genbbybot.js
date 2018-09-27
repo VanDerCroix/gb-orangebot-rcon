@@ -81,17 +81,17 @@ s.on('message', function (msg, info) {
 	console.log(text);
 
 	// connected
-	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" connected/);
+	re = named(/"(:<user_name>.+)[<](:<user_id>\d+)[>][<](:<steam_id>.*)[>]<>" entered/);
 	match = re.exec(text);
 	if (match !== null) {
 		if (match.capture('steam_id') != 'BOT') {
 			var conGameId = match.capture('user_id')
 			var conName = match.capture('user_name');
-			var conId = match.capture('steam_id');
+			/*var conId = match.capture('steam_id');
 			var conId64 = id64(conId);
 
-			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);
-			servers[addr].rcon('script pl = Entities.FindByClassname(pl, "'+conName+'"); script pl.SetTeam(3);');
+			console.log('real player connected: ' + conName + ' steamid: ' + conId64 + ' gameId: ' + conGameId);*/
+			servers[addr].rcon('script pl = Entities.FindByName(pl, "'+conName+'");script pl.SetTeam(3);');
 		}
 	}
 
