@@ -245,14 +245,19 @@ s.on('message', function (msg, info) {
 		case 'debug':
 			servers[addr].debug();
 			break;
+			
+		case 'myt':
+			servers[addr].rcon('script entPlayer = Entities.FindByClassname( entPlayer, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+			break;
+		case 'ott':
+			servers[addr].rcon('script entPlayer <- Entities.FindByClassname( entPlayer, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+			break;
 		case 'terro':
 			console.log(match.capture('user_name') + ' wants to go terro');
-			servers[addr].say(match.capture('user_name') + ' wants to go terro');
 			servers[addr].rcon('script sami <- Entities.FindByName( sami, "'+match.capture('user_name')+'" );script sami.SetTeam(2);');
 			break;
 		case 'tombo':
 			console.log(match.capture('user_name') + ' wants to go tombo');
-			servers[addr].say(match.capture('user_name') + ' wants to go tombo');
 			servers[addr].rcon('script sami <- Entities.FindByName( sami, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(sami.GetName())');
 			break;
 		case 'mapname':
