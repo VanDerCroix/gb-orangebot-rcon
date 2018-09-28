@@ -247,10 +247,10 @@ s.on('message', function (msg, info) {
 			break;
 
 		case 'qwe':
-			servers[addr].rcon('script entPlayer = Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+			servers[addr].rcon('script local entPlayer = Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
 			break;
 		case 'asd':
-			servers[addr].rcon('script entPlayer <- Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+			servers[addr].rcon('script local entPlayer <- Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
 			break;
 		case 'terro':
 			console.log(match.capture('user_name') + ' wants to go terro');
