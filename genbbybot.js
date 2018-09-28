@@ -245,12 +245,12 @@ s.on('message', function (msg, info) {
 		case 'debug':
 			servers[addr].debug();
 			break;
-			
-		case 'myt':
-			servers[addr].rcon('script entPlayer = Entities.FindByClassname( entPlayer, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+
+		case 'qwe':
+			servers[addr].rcon('script entPlayer = Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
 			break;
-		case 'ott':
-			servers[addr].rcon('script entPlayer <- Entities.FindByClassname( entPlayer, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
+		case 'asd':
+			servers[addr].rcon('script entPlayer <- Entities.FindByClassname( null, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
 			break;
 		case 'terro':
 			console.log(match.capture('user_name') + ' wants to go terro');
