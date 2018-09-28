@@ -246,16 +246,13 @@ s.on('message', function (msg, info) {
 			servers[addr].debug();
 			break;
 
-		case 'zxc':
-			servers[addr].rcon('script buttonReference <- Entities.FindByName( null, "samir" );script ScriptPrintMessageChatAll(buttonReference.GetName())');
+		case 'qwe':
+			servers[addr].rcon('script_execute welcome');
 			break;
-		case 'wer':
-			servers[addr].rcon('script buttonReference <- Entities.FindByName( buttonReference, "samir" );script ScriptPrintMessageChatAll(buttonReference.GetName())');
+		case 'zxc':
+			servers[addr].rcon('script welcome');
 			break;
 		case 'qwe':
-			servers[addr].rcon('script buttonReference <- Entities.FindByName( null, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(buttonReference.GetName())');
-			break;
-		case 'asd':
 			servers[addr].rcon('script buttonReference <- Entities.FindByName( buttonReference, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(buttonReference.GetName())');
 			break;
 		case 'terro':
