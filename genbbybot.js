@@ -248,15 +248,15 @@ s.on('message', function (msg, info) {
 		case 'terro':
 			console.log(match.capture('user_name') + ' wants to go terro');
 			servers[addr].say(match.capture('user_name') + ' wants to go terro');
-			servers[addr].rcon('script sami <- Entities.FindByName( null, "'+match.capture('user_name')+'" );script sami.SetTeam(2);');
+			servers[addr].rcon('script sami <- Entities.FindByName( sami, "'+match.capture('user_name')+'" );script sami.SetTeam(2);');
 			break;
 		case 'tombo':
 			console.log(match.capture('user_name') + ' wants to go tombo');
 			servers[addr].say(match.capture('user_name') + ' wants to go tombo');
-			servers[addr].rcon('script sami <- Entities.FindByName( null, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(sami.GetName())');
+			servers[addr].rcon('script sami <- Entities.FindByName( sami, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(sami.GetName())');
 			break;
 		case 'mapname':
-			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt().tostring());script ScriptPrintMessageCenterAll(GetMapName())');
+			servers[addr].rcon('script ScriptPrintMessageChatAll(RandomInt().tostring());script ScriptPrintMessageChatAll(GetMapName())');
 			break;
 		case 'time':
 			servers[addr].rcon('script mape <- "holi";script ScriptPrintMessageChatAll(mape)');
