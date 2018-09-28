@@ -246,6 +246,9 @@ s.on('message', function (msg, info) {
 			servers[addr].debug();
 			break;
 
+		case 'zxc':
+			servers[addr].rcon('script local player = null;script while ((player = Entities.FindByClassname(player, "player")) != null){ScriptPrintMessageChatAll(player.GetTeam())}');
+			break;
 		case 'qwe':
 			servers[addr].rcon('script local entPlayer = Entities.FindByClassname( entPlayer, "player" );script ScriptPrintMessageChatAll(entPlayer.GetName())');
 			break;
