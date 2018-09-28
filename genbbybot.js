@@ -249,10 +249,10 @@ s.on('message', function (msg, info) {
 		case 'qwe':
 			servers[addr].rcon('script_execute welcome');
 			break;
-		case 'zxc':
+		case 'asd':
 			servers[addr].rcon('script welcome');
 			break;
-		case 'qwe':
+		case 'zxc':
 			servers[addr].rcon('script buttonReference <- Entities.FindByName( buttonReference, "'+match.capture('user_name')+'" );script ScriptPrintMessageChatAll(buttonReference.GetName())');
 			break;
 		case 'terro':
