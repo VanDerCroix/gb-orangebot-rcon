@@ -8,6 +8,7 @@
     "url": "https://github.com/VanDerCroix/gb-orangebot-rcon"
   },
   "dependencies": {
+    "find-free-port": "^2.0.0",
     "ip": "latest",
     "named-regexp": "latest",
     "nconf": "latest",

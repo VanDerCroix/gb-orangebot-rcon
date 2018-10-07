@@ -88,8 +88,8 @@ s.on('message', function (msg, info) {
 			var conGameId = match.capture('user_id')
 			var conName = match.capture('user_name');
 			/*var conId = match.capture('steam_id');
-			var conId64 = id64(conId);
-*/
+			var conId64 = id64(conId);*/
+
 			console.log('real player connected: ' + conName + ' gameId: ' + conGameId);
 			//servers[addr].rcon('script Entities.FindByName( null, "'+conName+'" ).SetTeam(3);');
 		}

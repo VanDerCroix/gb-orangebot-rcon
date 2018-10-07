@@ -15,64 +15,31 @@ nconf.file({
 });
 
 var myport = nconf.get('port');
-var rcon_pass = nconf.get('default_rcon');
 var server_config = nconf.get('server');
 var serverType = nconf.get('serverType');
 
-String.prototype.format = function () {
-	var formatted = this;
-	for (var i = 0; i < arguments.length; i++) {
-		var regexp = new RegExp('\\{' + i + '\\}', 'gi');
-		formatted = formatted.replace(regexp, arguments[i]);
-	}
-	return formatted;
-};
-
 s.on('message', function (msg, info) {
 	var addr = info.address + ':' + info.port;
-	var text = msg.toString(),
-		param, cmd, re, match;
-
-	if (servers[addr] === undefined && addr.match(/(\d+\.){3}\d+/)) {
-		servers[addr] = new Server(String(addr), String(rcon_pass));
-	}
+	var text = msg.toString()
+	var match, re
 	console.log(text);
 
+	// connected
+	re = named(/get5_event: (:<event>.+)/);
+	match = re.exec(text);
+	if (match !== null) {
+		var event = match.capture('event');
+		console.log('event catched: ' + event);
+	}
 });
+s.bind(myport);
 
-function Player(steamid, team, name, clantag) {
-	this.steamid = steamid;
-	this.team = team;
-	this.name = name;
-	this.clantag = clantag;
-}
-function Server(address, pass, adminip, adminid, adminname) {
+function Server(address, pass, adminip, adminid) {
 	var tag = this;
 	this.state = {
 		ip: address.split(':')[0],
 		port: address.split(':')[1] || 27015,
-		pass: pass,
-		live: false,
-		map: '',
-		maps: [],
-		knife: false,
-		score: [],
-		knifewinner: false,
-		paused: false,
-		freeze: false,
-		unpause: {
-			'TERRORIST': false,
-			'CT': false
-		},
-		ready: {
-			'TERRORIST': false,
-			'CT': false
-		},
-		steamid: [],
-		admins: [],
-		queue: [],
-		players: {},
-		pauses: {}
+		pass: pass
 	};
 	this.realrcon = async function (cmd) {
 		if (cmd === undefined) return;
@@ -94,16 +61,11 @@ function Server(address, pass, adminip, adminid, adminname) {
 	};
 
 	this.realrcon('sv_rcon_whitelist_address ' + myip + ';logaddress_add ' + myip + ':' + myport + ';log on');
-	//this.status();
-
-	//s.send("plz go", 0, 6, this.state.port, this.state.ip); // SRCDS won't send data if it doesn't get contacted initially
 	console.log('Connected to ' + this.state.ip + ':' + this.state.port + ', pass ' + this.state.pass);
 }
 
-s.bind(myport);
-process.on('uncaughtException', function (err) {
-	console.log(err);
-});
+
+
 function initConnection() {
 	if(serverType == "local") myip = localIp;
 	
@@ -113,15 +75,6 @@ function initConnection() {
 		}
 	}
 	console.log('OrangeBot listening on ' + myport);
-	console.log('Run this in CS console to connect or configure orangebot.js:');
-	console.log('connect YOUR_SERVER;password YOUR_PASS;rcon_password YOUR_RCON;rcon sv_rcon_whitelist_address ' + myip + ';rcon logaddress_add ' + myip + ':' + myport + ';rcon log on; rcon rcon_password '+rcon_pass+"\n");
-	
-	console.log('starting genbby server match');
-	//servers['142.93.81.233:27015'].start(['overpass', 'cache', 'mirage'])
-}
-
-function id64(steamid) {
-	return (new SteamID(String(steamid))).getSteamID64();
 }
 
 function addServer(host, port, pass) {
@@ -129,4 +82,5 @@ function addServer(host, port, pass) {
 		servers[ip + ':' + port] = new Server(ip + ':' + port, pass);
 	});
 }
+
 initConnection()
