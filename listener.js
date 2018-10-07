@@ -23,7 +23,8 @@ s.on('message', function (msg, info) {
 	var text = msg.toString()
 	var match, re
 
-	text = text.replace(/^\s+|\s*|\s+$|\r?\n|\r|\0/gm,'')
+	text = text.replace(/\r?\n|\r|\0/gm,'')
+	//text = text.replace(/^\s+|\s*|\s+$/gm,'')
 	re = named(/get5_event:(:<event>.+)/)
 	match = re.exec(text)
 	if (match !== null) {
