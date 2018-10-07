@@ -31,7 +31,8 @@ s.on('message', function (msg, info) {
 	match = re.exec(text);
 	if (match !== null) {
 		var event = match.capture('event');
-		console.log('event catched: ' +event);
+		event = JSON.parse(event)
+		console.log('event catched: ' +event.event);
 	}
 });
 s.bind(myport);
