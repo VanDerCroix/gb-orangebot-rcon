@@ -29,7 +29,10 @@ s.on('message', function (msg, info) {
 	match = re.exec(text);
 	if (match !== null) {
 		var event = match.capture('event');
-		console.log('event catched: ' + msg+ " "+msg.matchid);
+		//console.log('event catched: ' +typeof msg+ " "+msg.matchid);
+		for(var pr in msg) {
+			if(msg.hasOwnProperty(pr)){console.log('prop: '+msg[pr])}
+		}
 	}
 });
 s.bind(myport);
