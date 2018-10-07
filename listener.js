@@ -24,6 +24,8 @@ s.on('message', function (msg, info) {
 	var match, re
 
 	text = text.replace(/\r?\n|\r/gm,'');
+	text = text.replace(/^\s+|\s+$/gm,'');
+	
 	console.log(text);
 
 	// connected
