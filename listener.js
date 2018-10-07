@@ -22,6 +22,8 @@ s.on('message', function (msg, info) {
 	var addr = info.address + ':' + info.port;
 	var text = msg.toString()
 	var match, re
+
+	text = text.replace(/\r?\n|\r/gm,'');
 	console.log(text);
 
 	// connected
@@ -29,10 +31,7 @@ s.on('message', function (msg, info) {
 	match = re.exec(text);
 	if (match !== null) {
 		var event = match.capture('event');
-		//console.log('event catched: ' +typeof msg+ " "+msg.matchid);
-		for(var pr in msg) {
-			if(msg.hasOwnProperty(pr)){console.log('prop: '+msg[pr])}
-		}
+		console.log('event catched: ' +event);
 	}
 });
 s.bind(myport);
