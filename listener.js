@@ -25,16 +25,16 @@ s.on('message', function (msg, info) {
 
 	text = text.replace(/\r?\n|\r/gm,'');
 	text = text.replace(/^\s+|\s+$/gm,'');
-	
-	console.log(text);
+
+	//console.log(text);
 
 	// connected
 	re = named(/get5_event: (:<event>.+)/);
 	match = re.exec(text);
 	if (match !== null) {
-		var event = match.capture('event');
-		event = JSON.parse(event)
-		console.log('event catched: ' +event.event);
+		var ev = match.capture('event');
+		var jsonev = JSON.parse(ev)
+		console.log('event catched: ' +jsonev);
 	}
 });
 s.bind(myport);
