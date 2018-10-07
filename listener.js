@@ -23,17 +23,18 @@ s.on('message', function (msg, info) {
 	var text = msg.toString()
 	var match, re
 
-
-	text = text.replace(/\r?\n|\r|\0/gm,'');
-	text = text.replace(/^\s+|\s*|\s+$/gm,'');
-
-	re = named(/get5_event:(:<event>.+)/);
-	match = re.exec(text);
+	text = text.replace(/^\s+|\s*|\s+$|\r?\n|\r|\0/gm,'')
+	re = named(/get5_event:(:<event>.+)/)
+	match = re.exec(text)
 	if (match !== null) {
-		var ev = match.capture('event');
+		var ev = match.capture('event')
 		try{
-			var jsonev = JSON.parse(ev);
-			console.log('event catched: ' +JSON.stringify(jsonev));
+			var jsonev = JSON.parse(ev)
+			//console.log('event catched: ' +JSON.stringify(jsonev));
+
+			if(jsonev.event == 'client_say') {
+				console.log(jsonev.params.client+' says: '+jsonev.params.message);
+			}
 		} catch(e){
 			console.log(e)
 		}
