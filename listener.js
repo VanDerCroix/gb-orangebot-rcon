@@ -29,7 +29,7 @@ s.on('message', function (msg, info) {
 	match = re.exec(text);
 	if (match !== null) {
 		var event = match.capture('event');
-		console.log('event catched: ' + msg.event+ " "+msg.matchid);
+		console.log('event catched: ' + msg+ " "+msg.matchid);
 	}
 });
 s.bind(myport);
