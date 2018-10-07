@@ -29,12 +29,14 @@ s.on('message', function (msg, info) {
 	//console.log(text);
 
 	// connected
-	re = named(/get5_event: (:<event>.+)/);
+	re = named(/get5_event:(:<event>.+)/);
 	match = re.exec(text);
 	if (match !== null) {
 		var ev = match.capture('event');
-		//var jsonev = JSON.parse(ev)
-		console.log('event catched: ' +ev);
+		try{
+		var jsonev = JSON.parse(ev);
+		console.log('event catched: ' +jsonev);
+		} catch(e){ console.log(e)}
 	}
 });
 s.bind(myport);
