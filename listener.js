@@ -23,28 +23,28 @@ s.on('message', function (msg, info) {
 	var text = msg.toString()
 	var match, re
 
-	for (var property in msg) {
-	    if (msg.hasOwnProperty(property)) {
-	        // do stuff
-	        console.log(msg[property]);
-	    }
-	}
-/*
+
 	text = text.replace(/\r?\n|\r/gm,'');
 	text = text.replace(/^\s+|\s*|\s+$/gm,'');
 
 	re = named(/get5_event:(:<event>.+)/);
 	match = re.exec(text);
 	if (match !== null) {
-		var ev = match.capture('event');
+/*		var ev = match.capture('event');
 		try{
 			var jsonev = JSON.parse(ev);
 			console.log('event catched: ' +jsonev);
 		} catch(e){
 			console.log(e)
+		}*/
+		for (var property in msg) {
+		    if (msg.hasOwnProperty(property)) {
+		        // do stuff
+		        console.log(msg[property]);
+		    }
 		}
 	}
-	*/
+	
 });
 s.bind(myport);
 
