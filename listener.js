@@ -76,7 +76,7 @@ function Server(address, pass, adminip, adminid) {
 		}
 	};
 
-	this.realrcon('sv_rcon_whitelist_address ' + myip + ';logaddress_add ' + myip + ':' + myport + ';log on');
+	this.realrcon('sv_rcon_whitelist_address 142.93.81.233;logaddress_add 142.93.81.233:' + myport + ';log on');
 	console.log('Connected to ' + this.state.ip + ':' + this.state.port + ', pass ' + this.state.pass);
 }
 
